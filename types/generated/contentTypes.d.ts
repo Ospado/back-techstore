@@ -373,6 +373,121 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCategoriaCategoria extends Struct.CollectionTypeSchema {
+  collectionName: 'categorias';
+  info: {
+    displayName: 'Categoria';
+    pluralName: 'categorias';
+    singularName: 'categoria';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    bannerImagen: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Descripcion: Schema.Attribute.Text;
+    featured: Schema.Attribute.Boolean;
+    Imagen: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::categoria.categoria'
+    > &
+      Schema.Attribute.Private;
+    Nombre: Schema.Attribute.String & Schema.Attribute.Required;
+    productos: Schema.Attribute.Relation<'oneToMany', 'api::producto.producto'>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'Nombre'> & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
+  info: {
+    displayName: 'Order';
+    pluralName: 'orders';
+    singularName: 'order';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Customer: Schema.Attribute.String & Schema.Attribute.Required;
+    Date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    Direccion: Schema.Attribute.Text & Schema.Attribute.Required;
+    Email: Schema.Attribute.Email & Schema.Attribute.Required;
+    Items: Schema.Attribute.Component<'product.order-item', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
+      Schema.Attribute.Private;
+    MetodoDePago: Schema.Attribute.String & Schema.Attribute.Required;
+    OrderNumber: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    StatusOrder: Schema.Attribute.Enumeration<
+      ['Pendiente', 'Procesado', 'Completo', 'Cancelado']
+    > &
+      Schema.Attribute.Required;
+    Total: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
+  collectionName: 'productos';
+  info: {
+    displayName: 'Producto';
+    pluralName: 'productos';
+    singularName: 'producto';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    categoria: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::categoria.categoria'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Descripcion: Schema.Attribute.Text & Schema.Attribute.Required;
+    features: Schema.Attribute.Text;
+    Imagen: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    isNew: Schema.Attribute.Boolean;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::producto.producto'
+    > &
+      Schema.Attribute.Private;
+    Nombre: Schema.Attribute.String & Schema.Attribute.Required;
+    oldPrice: Schema.Attribute.Decimal;
+    Precio: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'Nombre'> & Schema.Attribute.Required;
+    Stock: Schema.Attribute.Integer & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -882,6 +997,9 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::categoria.categoria': ApiCategoriaCategoria;
+      'api::order.order': ApiOrderOrder;
+      'api::producto.producto': ApiProductoProducto;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
